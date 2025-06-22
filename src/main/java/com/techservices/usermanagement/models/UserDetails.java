@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 public class UserDetails {
 
-    private Long id;
     private String username;
     private String email;
     private UserRoleEntity role;

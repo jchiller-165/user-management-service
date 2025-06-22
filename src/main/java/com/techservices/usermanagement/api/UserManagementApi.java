@@ -1,7 +1,6 @@
 package com.techservices.usermanagement.api;
 
-import com.techservices.usermanagement.models.reguests.CreateUserRequest;
-import com.techservices.usermanagement.models.reguests.UpdateUserRequest;
+import com.techservices.usermanagement.models.reguests.UserRequest;
 import com.techservices.usermanagement.models.responses.UserCreatedResponse;
 import com.techservices.usermanagement.models.responses.UserDetailsResponse;
 import com.techservices.usermanagement.models.responses.UserUpdateResponse;
@@ -31,7 +30,7 @@ public class UserManagementApi {
     }
 
     @PostMapping
-    public ResponseEntity<UserCreatedResponse> createUser(@Valid @RequestBody CreateUserRequest request) {
+    public ResponseEntity<UserCreatedResponse> createUser(@Valid @RequestBody UserRequest request) {
         if (userManagementValidator.validateCreateRequest(request)) {
             final UserCreatedResponse userCreatedResponse = userManagementService.createUser(request);
             return userCreatedResponse != null
@@ -43,7 +42,7 @@ public class UserManagementApi {
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<UserUpdateResponse> updateUser(@Valid @RequestBody UpdateUserRequest request,
+    public ResponseEntity<UserUpdateResponse> updateUser(@Valid @RequestBody UserRequest request,
                                                          @PathVariable Long userId) {
         if (userManagementValidator.validateUserUpdateRequest(request, userId)) {
             final UserUpdateResponse userUpdateResponse = userManagementService.updateUser(request, userId);
@@ -52,7 +51,7 @@ public class UserManagementApi {
                     : ResponseEntity.notFound()
                     .build();
         }
-        return ResponseEntity.notFound()
+        return ResponseEntity.badRequest()
                 .build();
     }
 

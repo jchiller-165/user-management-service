@@ -1,7 +1,6 @@
 package com.techservices.usermanagement.service.impl;
 
-import com.techservices.usermanagement.models.reguests.CreateUserRequest;
-import com.techservices.usermanagement.models.reguests.UpdateUserRequest;
+import com.techservices.usermanagement.models.reguests.UserRequest;
 import com.techservices.usermanagement.models.responses.UserCreatedResponse;
 import com.techservices.usermanagement.models.responses.UserDetailsResponse;
 import com.techservices.usermanagement.models.responses.UserUpdateResponse;
@@ -18,12 +17,12 @@ public class UserManagementServiceImpl implements UserManagementService {
     }
 
     @Override
-    public UserCreatedResponse createUser(@NonNull CreateUserRequest request) {
+    public UserCreatedResponse createUser(@NonNull UserRequest request) {
         return null;
     }
 
     @Override
-    public UserUpdateResponse updateUser(@NonNull UpdateUserRequest request, @NonNull Long userId) {
+    public UserUpdateResponse updateUser(@NonNull UserRequest request, @NonNull Long userId) {
         return null;
     }
 
