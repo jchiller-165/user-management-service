@@ -1,7 +1,7 @@
 package com.techservices.usermanagement.validator;
 
-import com.techservices.usermanagement.api.models.reguests.CreateUserRequest;
-import com.techservices.usermanagement.api.models.reguests.UpdateUserRequest;
+import com.techservices.usermanagement.models.reguests.CreateUserRequest;
+import com.techservices.usermanagement.models.reguests.UpdateUserRequest;
 
 public interface UserManagementValidator {
 
