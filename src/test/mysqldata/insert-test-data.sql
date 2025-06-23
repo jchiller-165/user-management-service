@@ -1,0 +1,2 @@
+insert into `user_management`.`company_info` (`id`,`company_name`, `address`, `city`, `state`, `country`, `postal_code`, `phone_number`) VALUES
+(1, 'Tech Solutions Inc.', '123 Tech Lane', 'Tech City', 'Tech State', 'Tech Country', '67890', '1234567890');

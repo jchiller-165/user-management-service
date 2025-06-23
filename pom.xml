@@ -19,6 +19,7 @@
 
     <properties>
         <java.version>21</java.version>
+        <project.settings.name>user-management</project.settings.name>
         <spring-boot.version>3.5.1</spring-boot.version>
         <spring-cloud.version>2025.0.0</spring-cloud.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
@@ -101,7 +102,6 @@
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <dependencyManagement>
@@ -197,7 +197,137 @@
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
+
+            <!-- Failsafe for integration tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>integration-tests</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <systemPropertyVariables>
+                        <spring.profiles.active>integration</spring.profiles.active>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!-- Setup & teardown MySQL container for integration tests -->
+        <profile>
+            <id>IntegrationTestSetup</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+
+                            <!-- Unix/Linux/macOS setup -->
+                            <execution>
+                                <id>mysql-setup-unix</id>
+                                <phase>pre-integration-test</phase>
+                                <configuration>
+                                    <target>
+                                        <condition property="is.unix">
+                                            <os family="unix"/>
+                                        </condition>
+                                        <exec executable="bash" osfamily="unix">
+                                            <arg value="${project.basedir}/src/test/scripts/mysql-test-setup.sh"/>
+                                            <arg value="mysql"/>
+                                            <arg value="8.0.32"/>
+                                            <arg value="${project.settings.name}"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+
+                            <!-- Windows setup -->
+                            <execution>
+                                <id>mysql-setup-windows</id>
+                                <phase>pre-integration-test</phase>
+                                <configuration>
+                                    <target>
+                                        <condition property="is.windows">
+                                            <os family="windows"/>
+                                        </condition>
+                                        <exec executable="powershell" osfamily="windows">
+                                            <arg value="-ExecutionPolicy"/>
+                                            <arg value="Bypass"/>
+                                            <arg value="-File"/>
+                                            <arg value="${project.basedir}/src/test/scripts/mysql-test-setup.ps1"/>
+                                            <arg value="mysql"/>
+                                            <arg value="8.0.32"/>
+                                            <arg value="${project.settings.name}"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+
+                            <!-- Unix/Linux/macOS teardown -->
+                            <execution>
+                                <id>mysql-teardown-unix</id>
+                                <phase>post-integration-test</phase>
+                                <configuration>
+                                    <target>
+                                        <condition property="is.unix">
+                                            <os family="unix"/>
+                                        </condition>
+                                        <exec executable="bash" osfamily="unix">
+                                            <arg value="${project.basedir}/src/test/scripts/mysql-test-teardown.sh"/>
+                                            <arg value="${project.settings.name}"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+
+                            <!-- Windows teardown -->
+                            <execution>
+                                <id>mysql-teardown-windows</id>
+                                <phase>post-integration-test</phase>
+                                <configuration>
+                                    <target>
+                                        <condition property="is.windows">
+                                            <os family="windows"/>
+                                        </condition>
+                                        <exec executable="powershell" osfamily="windows">
+                                            <arg value="-ExecutionPolicy"/>
+                                            <arg value="Bypass"/>
+                                            <arg value="-File"/>
+                                            <arg value="${project.basedir}/src/test/scripts/mysql-test-teardown.ps1"/>
+                                            <arg value="${project.settings.name}"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
