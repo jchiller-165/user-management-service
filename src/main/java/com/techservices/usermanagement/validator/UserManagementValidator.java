@@ -4,8 +4,8 @@ import com.techservices.usermanagement.models.reguests.UserRequest;
 
 public interface UserManagementValidator {
 
-    boolean validateCreateRequest(UserRequest request);
+    void validateCreateRequest(UserRequest request);
 
-    boolean validateUserUpdateRequest(UserRequest request, Long userId);
+    void validateUserUpdateRequest(UserRequest request, Long userId);
 
 }

@@ -38,8 +38,7 @@ public interface UserManagementService {
      * Deletes a user by user ID.
      *
      * @param userId the ID of the user
-     * @return true if deletion was successful, false otherwise
      */
-    Boolean deleteUser(@NonNull Long userId);
+    void deleteUser(@NonNull Long userId);
 
 }

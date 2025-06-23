@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 public class UserManagementValidatorImpl implements UserManagementValidator {
 
     @Override
-    public boolean validateCreateRequest(UserRequest request) {
-        return true;
+    public void validateCreateRequest(UserRequest request) {
+
     }
 
     @Override
-    public boolean validateUserUpdateRequest(UserRequest request, Long userId) {
-        return true;
+    public void validateUserUpdateRequest(UserRequest request, Long userId) {
+
     }
 
 }

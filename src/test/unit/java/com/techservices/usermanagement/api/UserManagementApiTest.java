@@ -2,6 +2,8 @@ package com.techservices.usermanagement.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techservices.usermanagement.TestModelsCreator;
+import com.techservices.usermanagement.errors.exceptions.BadRequestException;
+import com.techservices.usermanagement.errors.exceptions.NotFoundException;
 import com.techservices.usermanagement.models.reguests.UserRequest;
 import com.techservices.usermanagement.models.responses.UserCreatedResponse;
 import com.techservices.usermanagement.models.responses.UserUpdateResponse;
@@ -19,6 +21,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -50,8 +55,8 @@ class UserManagementApiTest {
 
     @Test
     void getUserById_notFound() throws Exception {
-        Mockito.when(userManagementService.getUserById(1L))
-                .thenReturn(null);
+        doThrow(new NotFoundException("Test Message")).
+                when(userManagementService).getUserById(anyLong());
 
         mockMvc.perform(get("/api/v1/users/1"))
                 .andExpect(status().isNotFound());
@@ -60,8 +65,9 @@ class UserManagementApiTest {
     @Test
     void createUser_success() throws Exception {
         UserRequest request = TestModelsCreator.createUserRequest();
-        Mockito.when(userManagementValidator.validateCreateRequest(any()))
-                .thenReturn(true);
+
+        doNothing().when(userManagementValidator).validateCreateRequest(any());
+
         Mockito.when(userManagementService.createUser(any()))
                 .thenReturn(new UserCreatedResponse(true, 1L));
 
@@ -74,8 +80,9 @@ class UserManagementApiTest {
     @Test
     void createUser_failValidation() throws Exception {
         UserRequest request = TestModelsCreator.createUserRequest();
-        Mockito.when(userManagementValidator.validateCreateRequest(any()))
-                .thenReturn(false);
+
+        doThrow(new BadRequestException("Test Message")).
+                when(userManagementValidator).validateCreateRequest(request);
 
         mockMvc.perform(post("/api/v1/users")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -87,8 +94,8 @@ class UserManagementApiTest {
     void createUser_invalidRequest() throws Exception {
         UserRequest request = TestModelsCreator.createUserRequest();
         request.setUsername(""); // Invalid username
-        Mockito.when(userManagementValidator.validateCreateRequest(any()))
-                .thenReturn(true);
+
+        doNothing().when(userManagementValidator).validateCreateRequest(any());
 
         mockMvc.perform(post("/api/v1/users")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -99,10 +106,11 @@ class UserManagementApiTest {
     @Test
     void updateUser_notFound() throws Exception {
         UserRequest request = TestModelsCreator.createUserRequest();
-        Mockito.when(userManagementValidator.validateUserUpdateRequest(any(), any()))
-                .thenReturn(true);
-        Mockito.when(userManagementService.updateUser(any(), any()))
-                .thenReturn(null);
+
+        doNothing().when(userManagementValidator).validateUserUpdateRequest(any(), anyLong());
+
+        doThrow(new NotFoundException("Test Message")).
+                when(userManagementService).updateUser(any(), anyLong());
 
         mockMvc.perform(put("/api/v1/users/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -113,9 +121,10 @@ class UserManagementApiTest {
     @Test
     void updateUser_success() throws Exception {
         UserRequest request = TestModelsCreator.createUserRequest();
-        Mockito.when(userManagementValidator.validateUserUpdateRequest(any(), any()))
-                .thenReturn(true);
-        Mockito.when(userManagementService.updateUser(any(), any()))
+
+        doNothing().when(userManagementValidator).validateUserUpdateRequest(any(), anyLong());
+
+        Mockito.when(userManagementService.updateUser(any(), anyLong()))
                 .thenReturn(new UserUpdateResponse(true, 1L));
 
         mockMvc.perform(put("/api/v1/users/1")
@@ -127,8 +136,9 @@ class UserManagementApiTest {
     @Test
     void updateUser_failValidation() throws Exception {
         UserRequest request = TestModelsCreator.createUserRequest();
-        Mockito.when(userManagementValidator.validateUserUpdateRequest(any(), any()))
-                .thenReturn(false);
+
+        doThrow(new BadRequestException("Test Message")).
+                when(userManagementValidator).validateUserUpdateRequest(any(), anyLong());
 
         mockMvc.perform(put("/api/v1/users/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -140,8 +150,8 @@ class UserManagementApiTest {
     void updateUser_invalidRequest() throws Exception {
         UserRequest request = TestModelsCreator.createUserRequest();
         request.setUsername(""); // Invalid username
-        Mockito.when(userManagementValidator.validateUserUpdateRequest(any(), any()))
-                .thenReturn(true);
+
+        doNothing().when(userManagementValidator).validateUserUpdateRequest(any(), anyLong());
 
         mockMvc.perform(put("/api/v1/users/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -151,8 +161,8 @@ class UserManagementApiTest {
 
     @Test
     void deleteUser_notFound() throws Exception {
-        Mockito.when(userManagementService.deleteUser(1L))
-                .thenReturn(false);
+        doThrow(new NotFoundException("Test Message")).
+                when(userManagementService).deleteUser(anyLong());
 
         mockMvc.perform(delete("/api/v1/users/1"))
                 .andExpect(status().isNotFound());
@@ -160,10 +170,9 @@ class UserManagementApiTest {
 
     @Test
     void deleteUser_success() throws Exception {
-        Mockito.when(userManagementService.deleteUser(1L))
-                .thenReturn(true);
+        doNothing().when(userManagementService).deleteUser(anyLong());
 
         mockMvc.perform(delete("/api/v1/users/1"))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 }

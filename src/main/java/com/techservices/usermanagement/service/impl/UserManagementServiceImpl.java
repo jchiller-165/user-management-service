@@ -27,8 +27,8 @@ public class UserManagementServiceImpl implements UserManagementService {
     }
 
     @Override
-    public Boolean deleteUser(@NonNull Long userId) {
-        return null;
+    public void deleteUser(@NonNull Long userId) {
+
     }
 
 }

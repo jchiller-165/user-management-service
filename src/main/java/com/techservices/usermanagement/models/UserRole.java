@@ -1,6 +1,5 @@
 package com.techservices.usermanagement.models;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 

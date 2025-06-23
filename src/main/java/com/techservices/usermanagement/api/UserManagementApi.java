@@ -23,43 +23,28 @@ public class UserManagementApi {
     @GetMapping("/{userId}")
     public ResponseEntity<UserDetailsResponse> getUserById(@PathVariable Long userId) {
         final UserDetailsResponse userDetailsResponse = userManagementService.getUserById(userId);
-        return userDetailsResponse != null
-                ? ResponseEntity.ok(userDetailsResponse)
-                : ResponseEntity.notFound()
-                .build();
+        return ResponseEntity.ok(userDetailsResponse);
     }
 
     @PostMapping
-    public ResponseEntity<UserCreatedResponse> createUser(@Valid @RequestBody UserRequest request) {
-        if (userManagementValidator.validateCreateRequest(request)) {
-            final UserCreatedResponse userCreatedResponse = userManagementService.createUser(request);
-            return userCreatedResponse != null
-                    ? ResponseEntity.ok(userCreatedResponse)
-                    : ResponseEntity.badRequest()
-                    .build();
-        }
-        return ResponseEntity.badRequest().build();
+    public ResponseEntity<UserCreatedResponse> createUser(@Valid @RequestBody UserRequest createRequest) {
+        userManagementValidator.validateCreateRequest(createRequest);
+        final UserCreatedResponse userCreatedResponse = userManagementService.createUser(createRequest);
+        return ResponseEntity.ok(userCreatedResponse);
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<UserUpdateResponse> updateUser(@Valid @RequestBody UserRequest request,
+    public ResponseEntity<UserUpdateResponse> updateUser(@Valid @RequestBody UserRequest updateRequest,
                                                          @PathVariable Long userId) {
-        if (userManagementValidator.validateUserUpdateRequest(request, userId)) {
-            final UserUpdateResponse userUpdateResponse = userManagementService.updateUser(request, userId);
-            return userUpdateResponse != null
-                    ? ResponseEntity.ok(userUpdateResponse)
-                    : ResponseEntity.notFound()
-                    .build();
-        }
-        return ResponseEntity.badRequest()
-                .build();
+        userManagementValidator.validateUserUpdateRequest(updateRequest, userId);
+        final UserUpdateResponse userUpdateResponse = userManagementService.updateUser(updateRequest, userId);
+        return ResponseEntity.ok(userUpdateResponse);
     }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<Boolean> deleteUser(@PathVariable Long userId) {
-        final Boolean isSuccess = userManagementService.deleteUser(userId);
-        return isSuccess ? ResponseEntity.ok(true) : ResponseEntity.notFound()
-                .build();
+        userManagementService.deleteUser(userId);
+        return ResponseEntity.noContent().build();
     }
 
 }
