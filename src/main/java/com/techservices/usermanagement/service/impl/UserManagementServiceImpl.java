@@ -11,7 +11,6 @@ import com.techservices.usermanagement.errors.exceptions.NotFoundException;
 import com.techservices.usermanagement.models.UserDetails;
 import com.techservices.usermanagement.models.requests.CreateUserRequest;
 import com.techservices.usermanagement.models.requests.UpdateUserRequest;
-import com.techservices.usermanagement.models.responses.CreateUserResponse;
 import com.techservices.usermanagement.models.responses.UpdateUserResponse;
 import com.techservices.usermanagement.repository.UserManagementRepository;
 import com.techservices.usermanagement.repository.entity.UserDetailsEntity;
@@ -41,8 +40,9 @@ public class UserManagementServiceImpl implements UserManagementService {
   }
 
   @Override
-  public CreateUserResponse createUser(@NonNull CreateUserRequest request) {
-    return null;
+  public Long createUser(@NonNull CreateUserRequest request) {
+    final UserDetailsEntity userDetailsEntity = userDetailsMapper.toUserDetailsEntity(request);
+    return userRepository.createUser(userDetailsEntity);
   }
 
   @Override

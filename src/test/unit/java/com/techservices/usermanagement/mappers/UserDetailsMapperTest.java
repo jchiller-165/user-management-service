@@ -4,15 +4,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.OffsetDateTime;
-
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
+import com.techservices.usermanagement.TestModelsCreator;
 import com.techservices.usermanagement.models.CompanyDetails;
 import com.techservices.usermanagement.models.ContactInfo;
 import com.techservices.usermanagement.models.UserDetails;
 import com.techservices.usermanagement.models.UserRole;
+import com.techservices.usermanagement.models.requests.CreateUserRequest;
 import com.techservices.usermanagement.repository.entity.CompanyDetailsEntity;
 import com.techservices.usermanagement.repository.entity.ContactInfoEntity;
 import com.techservices.usermanagement.repository.entity.UserDetailsEntity;
@@ -24,11 +24,10 @@ public class UserDetailsMapperTest {
 
   @Test
   void toUserDetails_mapsFieldsCorrectly() {
-    UserDetailsEntity expectedEntity = createUserDetailsEntity();
+    UserDetailsEntity expectedEntity = TestModelsCreator.createUserDetailsEntity();
     UserDetails userDetails = mapper.toUserDetails(expectedEntity);
 
     assertNotNull(userDetails);
-
     assertEquals(expectedEntity.getId(), userDetails.getUserId());
     assertEquals(expectedEntity.getUsername(), userDetails.getUsername());
     assertEquals(expectedEntity.getUserRole(), userDetails.getUserRole());
@@ -36,45 +35,16 @@ public class UserDetailsMapperTest {
     assertTrue(compareContactInfo(expectedEntity.getContactInfo(), userDetails.getContactInfo()));
   }
 
-  private UserDetailsEntity createUserDetailsEntity() {
-    UserDetailsEntity entity = new UserDetailsEntity();
-    entity.setId(1L);
-    entity.setUsername("testuser");
-    entity.setUserRole(UserRole.RoleTypeEnum.ADMIN);
+  @Test
+  void toUserDetailsEntity_mapsFieldsCorrectly() {
+    CreateUserRequest request = TestModelsCreator.createUserCreateRequest();
+    UserDetailsEntity entity = mapper.toUserDetailsEntity(request);
 
-    entity.setCompanyDetails(createCompanyDetailsEntity());
-    entity.setContactInfo(createContactInfoEntity());
-    return entity;
-  }
-
-  private CompanyDetailsEntity createCompanyDetailsEntity() {
-    CompanyDetailsEntity companyDetails = new CompanyDetailsEntity();
-    companyDetails.setId(1L);
-    companyDetails.setCompanyName("Tech Services");
-    companyDetails.setAddress("123 Tech Lane");
-    companyDetails.setCity("Tech City");
-    companyDetails.setState("Tech State");
-    companyDetails.setPostalCode("12345");
-    companyDetails.setCountry("Techland");
-    companyDetails.setCreatedAt(OffsetDateTime.now());
-    companyDetails.setUpdatedAt(OffsetDateTime.now());
-    return companyDetails;
-  }
-
-  private ContactInfoEntity createContactInfoEntity() {
-    ContactInfoEntity contactInfo = new ContactInfoEntity();
-    contactInfo.setFirstName("John");
-    contactInfo.setLastName("Doe");
-    contactInfo.setEmail("someEmail@email.com");
-    contactInfo.setPhoneNumber("123-456-7890");
-    contactInfo.setId(1L);
-    contactInfo.setCity("Tech City");
-    contactInfo.setState("Tech State");
-    contactInfo.setPostalCode("12345");
-    contactInfo.setCountry("Techland");
-    contactInfo.setCreatedAt(OffsetDateTime.now());
-    contactInfo.setUpdatedAt(OffsetDateTime.now());
-    return contactInfo;
+    assertNotNull(entity);
+    assertEquals(request.getUsername(), entity.getUsername());
+    assertEquals(UserRole.RoleTypeEnum.findRoleType(request.getUserRole().getValue()), entity.getUserRole());
+    assertTrue(compareCompanyDetailsEntity(request.getCompanyDetails(), entity.getCompanyDetails()));
+    assertTrue(compareContactInfoEntity(request.getContactInfo(), entity.getContactInfo()));
   }
 
   private boolean compareCompanyDetails(CompanyDetailsEntity expected, CompanyDetails companyDetails) {
@@ -91,4 +61,16 @@ public class UserDetailsMapperTest {
         && expected.getCountry().equals(contactInfo.getCountry());
   }
 
+  private boolean compareCompanyDetailsEntity(CreateUserRequest.CompanyDetails expected, CompanyDetailsEntity actual) {
+    return expected.getCompanyName().equals(actual.getCompanyName()) && expected.getAddress()
+        .equals(actual.getAddress()) && expected.getCity().equals(actual.getCity()) && expected.getState()
+        .equals(actual.getState()) && expected.getPostalCode().equals(actual.getPostalCode()) && expected.getCountry()
+        .equals(actual.getCountry());
+  }
+
+  private boolean compareContactInfoEntity(CreateUserRequest.ContactInfo expected, ContactInfoEntity actual) {
+    return expected.getEmail().equals(actual.getEmail()) && expected.getPhoneNumber().equals(actual.getPhoneNumber())
+        && expected.getCity().equals(actual.getCity()) && expected.getState().equals(actual.getState())
+        && expected.getPostalCode().equals(actual.getPostalCode()) && expected.getCountry().equals(actual.getCountry());
+  }
 }

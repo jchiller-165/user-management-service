@@ -11,8 +11,8 @@ Feature: Get the User Details for a given user ID
     And the response includes the data in the file "<response>"
 
     Examples:
-      |  userId     | response                                    |
-      |    1        | responses/user_details_GET_scenario_1.json  |
+      | userId | response                                   |
+      | 1      | responses/user_details_GET_scenario_1.json |
 
   Scenario Outline: [2] A "GET"  request is sent to the endpoint to retrieve user details that does not exist
 
@@ -21,8 +21,8 @@ Feature: Get the User Details for a given user ID
     Then the response has status code = 404
 
     Examples:
-      |  userId     |
-      |    2        |
+      | userId    |
+      | 999       |
 
   Scenario Outline: [3] A "GET"  request is sent to the endpoint to retrieve user details with a blank user ID
 
@@ -31,5 +31,5 @@ Feature: Get the User Details for a given user ID
     Then the response has status code = 404
 
     Examples:
-      |  userId     |
-      |             |
+      | userId |
+      |        |

@@ -3,7 +3,6 @@ package com.techservices.usermanagement.service;
 import com.techservices.usermanagement.models.UserDetails;
 import com.techservices.usermanagement.models.requests.CreateUserRequest;
 import com.techservices.usermanagement.models.requests.UpdateUserRequest;
-import com.techservices.usermanagement.models.responses.CreateUserResponse;
 import com.techservices.usermanagement.models.responses.UpdateUserResponse;
 
 import lombok.NonNull;
@@ -21,10 +20,10 @@ public interface UserManagementService {
   /**
    * Creates user details for a user.
    *
-   * @return UserDetailsResponse containing user details or null if not found
+   * @return Long containing User ID
    * @CreateUserRequest request containing new user details
    */
-  CreateUserResponse createUser(@NonNull CreateUserRequest request);
+  Long createUser(@NonNull CreateUserRequest request);
 
   /**
    * Updates user details for a user ID.
