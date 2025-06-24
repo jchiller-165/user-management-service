@@ -2,11 +2,10 @@ package com.techservices.usermanagement.repository;
 
 import com.techservices.usermanagement.repository.entity.UserDetailsEntity;
 import lombok.NonNull;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface UserManagementRepository extends JpaRepository<UserDetailsEntity, Long> {
+public interface UserManagementRepository {
 
     /**
      * Finds a user by their ID.
@@ -21,14 +20,14 @@ public interface UserManagementRepository extends JpaRepository<UserDetailsEntit
      *
      * @param userDetailsEntity the UserEntity to create
      */
-    void createUser(@NonNull UserDetailsEntity userDetailsEntity);
+    Long createUser(@NonNull UserDetailsEntity userDetailsEntity);
 
     /**
      * Updates an existing user in the repository.
      *
      * @param userDetailsEntity the UserEntity to update
      */
-    void updateUser(@NonNull UserDetailsEntity userDetailsEntity);
+    boolean updateUser(@NonNull UserDetailsEntity userDetailsEntity);
 
     /**
      * Deletes a user by their ID.
