@@ -1,0 +1,26 @@
+{
+  "userId": 1,
+  "username": "alice_johnson",
+  "userRole": "ADMIN",
+  "contactInfo": {
+    "email": "alice@email.com",
+    "firstName": "Alice",
+    "lastName": "Johnson",
+    "phoneNumber": "+1-650-987-6543",
+    "address": "456 Elm Street",
+    "city": "San Francisco",
+    "state": "California",
+    "postalCode": "94105",
+    "country": "USA"
+  },
+  "companyDetails": {
+    "companyName": "Tech Innovations Inc.",
+    "address": "123 Tech Lane",
+    "city": "Silicon Valley",
+    "state": "California",
+    "postalCode": "94043",
+    "country": "USA",
+    "phoneNumber": "+1-650-123-4567",
+    "website": "www.techinnovations.com"
+  }
+}

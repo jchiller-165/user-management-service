@@ -1,22 +1,13 @@
 package com.techservices.usermanagement;
 
-import io.cucumber.junit.Cucumber;
-import io.cucumber.junit.CucumberOptions;
-import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import static io.cucumber.core.options.Constants.GLUE_PROPERTY_NAME;
 
-@RunWith(Cucumber.class)
-@CucumberOptions(
-        features = "classpath:features",
-        glue = "com.techservices.usermanagement.stepdefs",
-        plugin = {"pretty", "summary"}
-)
+import org.junit.platform.suite.api.ConfigurationParameter;
+import org.junit.platform.suite.api.SelectClasspathResource;
+import org.junit.platform.suite.api.Suite;
+
+@Suite
+@SelectClasspathResource("features")
+@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.techservices.usermanagement.stepdefs")
 public class RunCucumberIT {
-
-    @Test
-    void contextLoads() {
-        // This method is used to ensure that the Spring context loads correctly.
-        // It will be executed by the Cucumber runner.
-    }
-
 }

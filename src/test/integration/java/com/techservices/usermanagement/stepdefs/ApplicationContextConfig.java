@@ -1,4 +1,4 @@
-package com.techservices.usermanagement;
+package com.techservices.usermanagement.stepdefs;
 
 import io.cucumber.spring.CucumberContextConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;

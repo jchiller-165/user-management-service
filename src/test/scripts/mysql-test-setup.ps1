@@ -1,7 +1,8 @@
 param(
     [string]$ContainerRepo,
     [string]$ContainerVersion,
-    [string]$ProjectName
+    [string]$ProjectName,
+    [string]$MysqlEntryPoint
 )
 
 $ErrorActionPreference = "Stop"
@@ -26,7 +27,7 @@ if ($existingContainer) {
 }
 
 Write-Host "Starting MySQL Docker container ..."
-docker run --platform linux/amd64 -d --name $ContainerName -e "MYSQL_ROOT_PASSWORD=$MySQLRootPassword" -e "MYSQL_DATABASE=$MySQLDatabase" -p "$MySQLPort`:3306" "${ContainerRepo}:${ContainerVersion}" | Out-Null
+docker run --platform linux/amd64 -d --name $ContainerName -e "MYSQL_ROOT_PASSWORD=$MySQLRootPassword" -e "MYSQL_DATABASE=$MySQLDatabase" -p "$MySQLPort`:3306" -v "$MysqlEntryPoint:/docker-entrypoint-initdb.d:ro,Z" "${ContainerRepo}:${ContainerVersion}" | Out-Null
 
 Write-Host "Waiting for Docker to register the container ..."
 do {

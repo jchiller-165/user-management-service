@@ -3,331 +3,354 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
          https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.1</version>
-    </parent>
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.5.1</version>
+  </parent>
 
-    <groupId>com.techservices</groupId>
-    <artifactId>user-management-service</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <name>user-management-service</name>
-    <description>The microservice responsible for user management</description>
+  <groupId>com.techservices</groupId>
+  <artifactId>user-management-service</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <name>user-management-service</name>
+  <description>The microservice responsible for user management</description>
 
-    <properties>
-        <java.version>21</java.version>
-        <project.settings.name>user-management</project.settings.name>
-        <spring-boot.version>3.5.1</spring-boot.version>
-        <spring-cloud.version>2025.0.0</spring-cloud.version>
-        <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
-        <org.projectlombok.version>1.18.34</org.projectlombok.version>
-        <mysql-connector-java.version>8.0.32</mysql-connector-java.version>
-        <cucumber.version>7.14.0</cucumber.version>
-        <org.projectlombok.lombok-mapstruct-binding.version>0.2.0</org.projectlombok.lombok-mapstruct-binding.version>
-    </properties>
+  <properties>
+    <java.version>21</java.version>
+    <project.settings.name>user-management</project.settings.name>
+    <spring-boot.version>3.5.1</spring-boot.version>
+    <spring-cloud.version>2025.0.0</spring-cloud.version>
+    <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+    <org.projectlombok.version>1.18.34</org.projectlombok.version>
+    <mysql-connector-java.version>8.0.32</mysql-connector-java.version>
+    <mysqldata.test.dir>${project.basedir}/src/test/mysqldata</mysqldata.test.dir>
+    <cucumber.version>7.14.0</cucumber.version>
+    <org.projectlombok.lombok-mapstruct-binding.version>0.2.0</org.projectlombok.lombok-mapstruct-binding.version>
+  </properties>
 
+  <dependencies>
+
+    <!-- Spring Boot starters -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+
+    <!-- MySQL driver -->
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>${mysql-connector-java.version}</version>
+    </dependency>
+
+    <!-- Lombok -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${org.projectlombok.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- MapStruct -->
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+      <version>${org.mapstruct.version}</version>
+    </dependency>
+
+    <!-- Unit + integration testing -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-java</artifactId>
+      <version>${cucumber.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-spring</artifactId>
+      <version>${cucumber.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-junit-platform-engine</artifactId>
+      <version>${cucumber.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>5.16.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-suite</artifactId>
+      <version>1.10.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.javacrumbs.json-unit</groupId>
+      <artifactId>json-unit-assertj</artifactId>
+      <version>2.40.0</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <dependencyManagement>
     <dependencies>
-
-        <!-- Spring Boot starters -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
-
-        <!-- MySQL driver -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql-connector-java.version}</version>
-        </dependency>
-
-        <!-- Lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${org.projectlombok.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- MapStruct -->
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>${org.mapstruct.version}</version>
-        </dependency>
-
-        <!-- Unit + integration testing -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-java</artifactId>
-            <version>${cucumber.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-spring</artifactId>
-            <version>${cucumber.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-junit</artifactId>
-            <version>${cucumber.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>5.16.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <version>${spring-cloud.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
     </dependencies>
+  </dependencyManagement>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+  <build>
+    <plugins>
+      <!-- Spring Boot -->
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
 
-    <build>
+      <!-- Compiler -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <source>21</source>
+          <target>21</target>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.mapstruct</groupId>
+              <artifactId>mapstruct-processor</artifactId>
+              <version>${org.mapstruct.version}</version>
+            </path>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>${org.projectlombok.version}</version>
+            </path>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok-mapstruct-binding</artifactId>
+              <version>${org.projectlombok.lombok-mapstruct-binding.version}</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+      </plugin>
+
+      <!-- Add custom test sources -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.9.1</version>
+        <executions>
+          <execution>
+            <id>add-integration-test-source</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/test/integration/java</source>
+              </sources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>add-unit-test-source</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/test/unit/java</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Surefire for unit tests -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+          <testSourceDirectory>src/test/unit/java</testSourceDirectory>
+          <systemPropertyVariables>
+            <spring.profiles.active>test</spring.profiles.active>
+          </systemPropertyVariables>
+        </configuration>
+      </plugin>
+
+      <!-- Failsafe for integration tests -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>integration-tests</id>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <includes>
+            <include>**/*IT.java</include>
+          </includes>
+          <systemPropertyVariables>
+            <spring.profiles.active>integration</spring.profiles.active>
+          </systemPropertyVariables>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <!-- Setup & teardown MySQL container for integration tests -->
+    <profile>
+      <id>IntegrationTestSetup</id>
+      <build>
         <plugins>
-            <!-- Spring Boot -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>3.1.0</version>
+            <executions>
 
-            <!-- Compiler -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+              <!-- Unix/Linux/macOS setup -->
+              <execution>
+                <id>mysql-setup-unix</id>
+                <phase>pre-integration-test</phase>
                 <configuration>
-                    <source>21</source>
-                    <target>21</target>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.mapstruct</groupId>
-                            <artifactId>mapstruct-processor</artifactId>
-                            <version>${org.mapstruct.version}</version>
-                        </path>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>${org.projectlombok.version}</version>
-                        </path>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok-mapstruct-binding</artifactId>
-                            <version>${org.projectlombok.lombok-mapstruct-binding.version}</version>
-                        </path>
-                    </annotationProcessorPaths>
+                  <target>
+                    <condition property="is.unix">
+                      <os family="unix"/>
+                    </condition>
+                    <exec executable="bash" osfamily="unix">
+                      <arg value="${project.basedir}/src/test/scripts/mysql-test-setup.sh"/>
+                      <arg value="mysql"/>
+                      <arg value="8.0.32"/>
+                      <arg value="${project.settings.name}"/>
+                      <arg value="${mysqldata.test.dir}"/>
+                    </exec>
+                  </target>
                 </configuration>
-            </plugin>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+              </execution>
 
-            <!-- Add custom test sources -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.9.1</version>
-                <executions>
-                    <execution>
-                        <id>add-integration-test-source</id>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>add-test-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>src/test/integration/java</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>add-unit-test-source</id>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>add-test-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>src/test/unit/java</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- Surefire for unit tests -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0</version>
+              <!-- Windows setup -->
+              <execution>
+                <id>mysql-setup-windows</id>
+                <phase>pre-integration-test</phase>
                 <configuration>
-                    <testSourceDirectory>src/test/unit/java</testSourceDirectory>
-                    <systemPropertyVariables>
-                        <spring.profiles.active>test</spring.profiles.active>
-                    </systemPropertyVariables>
+                  <target>
+                    <condition property="is.windows">
+                      <os family="windows"/>
+                    </condition>
+                    <exec executable="powershell" osfamily="windows">
+                      <arg value="-ExecutionPolicy"/>
+                      <arg value="Bypass"/>
+                      <arg value="-File"/>
+                      <arg value="${project.basedir}/src/test/scripts/mysql-test-setup.ps1"/>
+                      <arg value="mysql"/>
+                      <arg value="8.0.32"/>
+                      <arg value="${project.settings.name}"/>
+                      <arg value="${mysqldata.test.dir}"/>
+                    </exec>
+                  </target>
                 </configuration>
-            </plugin>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+              </execution>
 
-            <!-- Failsafe for integration tests -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>integration-tests</id>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
+              <!-- Unix/Linux/macOS teardown -->
+              <execution>
+                <id>mysql-teardown-unix</id>
+                <phase>post-integration-test</phase>
                 <configuration>
-                    <systemPropertyVariables>
-                        <spring.profiles.active>integration</spring.profiles.active>
-                    </systemPropertyVariables>
+                  <target>
+                    <condition property="is.unix">
+                      <os family="unix"/>
+                    </condition>
+                    <exec executable="bash" osfamily="unix">
+                      <arg value="${project.basedir}/src/test/scripts/mysql-test-teardown.sh"/>
+                      <arg value="${project.settings.name}"/>
+                    </exec>
+                  </target>
                 </configuration>
-            </plugin>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+
+              <!-- Windows teardown -->
+              <execution>
+                <id>mysql-teardown-windows</id>
+                <phase>post-integration-test</phase>
+                <configuration>
+                  <target>
+                    <condition property="is.windows">
+                      <os family="windows"/>
+                    </condition>
+                    <exec executable="powershell" osfamily="windows">
+                      <arg value="-ExecutionPolicy"/>
+                      <arg value="Bypass"/>
+                      <arg value="-File"/>
+                      <arg value="${project.basedir}/src/test/scripts/mysql-test-teardown.ps1"/>
+                      <arg value="${project.settings.name}"/>
+                    </exec>
+                  </target>
+                </configuration>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+
+            </executions>
+          </plugin>
         </plugins>
-    </build>
-
-    <profiles>
-        <!-- Setup & teardown MySQL container for integration tests -->
-        <profile>
-            <id>IntegrationTestSetup</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <version>3.1.0</version>
-                        <executions>
-
-                            <!-- Unix/Linux/macOS setup -->
-                            <execution>
-                                <id>mysql-setup-unix</id>
-                                <phase>pre-integration-test</phase>
-                                <configuration>
-                                    <target>
-                                        <condition property="is.unix">
-                                            <os family="unix"/>
-                                        </condition>
-                                        <exec executable="bash" osfamily="unix">
-                                            <arg value="${project.basedir}/src/test/scripts/mysql-test-setup.sh"/>
-                                            <arg value="mysql"/>
-                                            <arg value="8.0.32"/>
-                                            <arg value="${project.settings.name}"/>
-                                        </exec>
-                                    </target>
-                                </configuration>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                            </execution>
-
-                            <!-- Windows setup -->
-                            <execution>
-                                <id>mysql-setup-windows</id>
-                                <phase>pre-integration-test</phase>
-                                <configuration>
-                                    <target>
-                                        <condition property="is.windows">
-                                            <os family="windows"/>
-                                        </condition>
-                                        <exec executable="powershell" osfamily="windows">
-                                            <arg value="-ExecutionPolicy"/>
-                                            <arg value="Bypass"/>
-                                            <arg value="-File"/>
-                                            <arg value="${project.basedir}/src/test/scripts/mysql-test-setup.ps1"/>
-                                            <arg value="mysql"/>
-                                            <arg value="8.0.32"/>
-                                            <arg value="${project.settings.name}"/>
-                                        </exec>
-                                    </target>
-                                </configuration>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                            </execution>
-
-                            <!-- Unix/Linux/macOS teardown -->
-                            <execution>
-                                <id>mysql-teardown-unix</id>
-                                <phase>post-integration-test</phase>
-                                <configuration>
-                                    <target>
-                                        <condition property="is.unix">
-                                            <os family="unix"/>
-                                        </condition>
-                                        <exec executable="bash" osfamily="unix">
-                                            <arg value="${project.basedir}/src/test/scripts/mysql-test-teardown.sh"/>
-                                            <arg value="${project.settings.name}"/>
-                                        </exec>
-                                    </target>
-                                </configuration>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                            </execution>
-
-                            <!-- Windows teardown -->
-                            <execution>
-                                <id>mysql-teardown-windows</id>
-                                <phase>post-integration-test</phase>
-                                <configuration>
-                                    <target>
-                                        <condition property="is.windows">
-                                            <os family="windows"/>
-                                        </condition>
-                                        <exec executable="powershell" osfamily="windows">
-                                            <arg value="-ExecutionPolicy"/>
-                                            <arg value="Bypass"/>
-                                            <arg value="-File"/>
-                                            <arg value="${project.basedir}/src/test/scripts/mysql-test-teardown.ps1"/>
-                                            <arg value="${project.settings.name}"/>
-                                        </exec>
-                                    </target>
-                                </configuration>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                            </execution>
-
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+      </build>
+    </profile>
+  </profiles>
 
 </project>
