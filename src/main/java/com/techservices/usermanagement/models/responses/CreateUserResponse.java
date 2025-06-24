@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class CreateUserResponse {
 
-    private String userId;
-    private String message;
+  private String userId;
+  private String message;
 
 }

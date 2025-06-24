@@ -6,12 +6,20 @@ spring:
     name: user-management-service
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/user_management}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3307/user_management}
     username: ${SPRING_DATASOURCE_USERNAME:root}
     password: ${SPRING_DATASOURCE_PASSWORD:password}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     show-sql: true
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.web.client.RestTemplate: DEBUG
+    org.springframework.test.web.client: DEBUG
+    org.apache.http: DEBUG
+    org.apache.http.wire: DEBUG

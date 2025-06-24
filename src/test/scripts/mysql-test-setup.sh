@@ -4,6 +4,7 @@ set -e
 CONTAINER_REPO=$1
 CONTAINER_VERSION=$2
 PROJECT_NAME=$3
+MYSQL_ENTRYPOINT=$4
 
 CONTAINER_NAME="test-db-${PROJECT_NAME}"
 MYSQL_ROOT_PASSWORD="password"
@@ -18,12 +19,13 @@ if [ "$(docker ps -aq -f name="${CONTAINER_NAME}")" ]; then
   docker rm -f "${CONTAINER_NAME}"
 fi
 
-echo "🚀 Starting MySQL Docker container..."
+echo "🚀 Starting MySQL Docker container... with entrypoint scripts from ${MYSQL_ENTRYPOINT}..."
 docker run --platform linux/amd64 -d \
   --name "${CONTAINER_NAME}" \
   -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} \
   -e MYSQL_DATABASE=${MYSQL_DATABASE} \
   -p ${MYSQL_PORT}:3306 \
+  -v "${MYSQL_ENTRYPOINT}:/docker-entrypoint-initdb.d:ro,Z" \
   "${CONTAINER_REPO}:${CONTAINER_VERSION}"
 
 echo "⏳ Waiting for MySQL to accept connections INSIDE the container..."
