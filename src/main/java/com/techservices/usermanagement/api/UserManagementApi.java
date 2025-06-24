@@ -1,10 +1,10 @@
 package com.techservices.usermanagement.api;
 
-import com.techservices.usermanagement.models.requests.CreateUserRequest;
-import com.techservices.usermanagement.models.responses.CreateUserResponse;
-import com.techservices.usermanagement.models.requests.UpdateUserRequest;
-import com.techservices.usermanagement.models.responses.UpdateUserResponse;
 import com.techservices.usermanagement.models.UserDetails;
+import com.techservices.usermanagement.models.requests.CreateUserRequest;
+import com.techservices.usermanagement.models.requests.UpdateUserRequest;
+import com.techservices.usermanagement.models.responses.CreateUserResponse;
+import com.techservices.usermanagement.models.responses.UpdateUserResponse;
 import com.techservices.usermanagement.service.UserManagementService;
 import com.techservices.usermanagement.validator.UserManagementValidator;
 import jakarta.validation.Valid;

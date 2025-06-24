@@ -9,7 +9,7 @@ public class UserDetails {
     private String username;
     private String firstName;
     private String lastName;
-    private UserRole userRole;
+    private UserRole.RoleTypeEnum userRole;
     private ContactInfo contactInfo;
     private CompanyDetails companyDetails;
 

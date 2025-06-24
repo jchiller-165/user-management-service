@@ -1,10 +1,10 @@
 package com.techservices.usermanagement.service;
 
-import com.techservices.usermanagement.models.requests.CreateUserRequest;
-import com.techservices.usermanagement.models.responses.CreateUserResponse;
-import com.techservices.usermanagement.models.requests.UpdateUserRequest;
-import com.techservices.usermanagement.models.responses.UpdateUserResponse;
 import com.techservices.usermanagement.models.UserDetails;
+import com.techservices.usermanagement.models.requests.CreateUserRequest;
+import com.techservices.usermanagement.models.requests.UpdateUserRequest;
+import com.techservices.usermanagement.models.responses.CreateUserResponse;
+import com.techservices.usermanagement.models.responses.UpdateUserResponse;
 import lombok.NonNull;
 
 public interface UserManagementService {
