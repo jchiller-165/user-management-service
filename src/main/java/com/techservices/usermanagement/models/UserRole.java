@@ -2,6 +2,7 @@ package com.techservices.usermanagement.models;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.Getter;
 
 import java.util.Arrays;
 
@@ -11,20 +12,15 @@ public class UserRole {
     @NotNull
     private UserRole.RoleTypeEnum roleType;
 
+    @Getter
     public enum RoleTypeEnum {
         ADMIN("admin"),
-        OWNER("owner"),
-        TECHNICIAN("technician"),
-        CUSTOMER("customer");
+        USER("user");
 
         private final String value;
 
         RoleTypeEnum(final String value) {
             this.value = value;
-        }
-
-        public String getValue() {
-            return this.value;
         }
 
         public static RoleTypeEnum fromString(final String incomingValue) {

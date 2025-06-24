@@ -1,11 +1,12 @@
 package com.techservices.usermanagement.validator;
 
-import com.techservices.usermanagement.models.reguests.UserRequest;
+import com.techservices.usermanagement.models.requests.CreateUserRequest;
+import com.techservices.usermanagement.models.requests.UpdateUserRequest;
 
 public interface UserManagementValidator {
 
-    void validateCreateRequest(UserRequest request);
+    void validateCreateRequest(CreateUserRequest request);
 
-    void validateUserUpdateRequest(UserRequest request, Long userId);
+    void validateUserUpdateRequest(UpdateUserRequest request, Long userId);
 
 }

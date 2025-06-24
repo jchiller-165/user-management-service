@@ -1,15 +1,16 @@
 package com.techservices.usermanagement.models;
 
-import com.techservices.usermanagement.repository.entity.UserRoleEntity;
 import lombok.Data;
 
 @Data
 public class UserDetails {
 
+    private Long userId;
     private String username;
-    private String email;
-    private UserRoleEntity role;
-    private CompanyDetails companyDetails;
+    private String firstName;
+    private String lastName;
+    private UserRole userRole;
     private ContactInfo contactInfo;
+    private CompanyDetails companyDetails;
 
 }

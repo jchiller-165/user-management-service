@@ -5,9 +5,9 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class UserCreatedResponse {
+public class CreateUserResponse {
 
-    private Boolean success;
-    private Long userId;
+    private String userId;
+    private String message;
 
 }

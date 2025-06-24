@@ -1,9 +1,10 @@
 package com.techservices.usermanagement.service.impl;
 
-import com.techservices.usermanagement.models.reguests.UserRequest;
-import com.techservices.usermanagement.models.responses.UserCreatedResponse;
-import com.techservices.usermanagement.models.responses.UserDetailsResponse;
-import com.techservices.usermanagement.models.responses.UserUpdateResponse;
+import com.techservices.usermanagement.models.requests.CreateUserRequest;
+import com.techservices.usermanagement.models.responses.CreateUserResponse;
+import com.techservices.usermanagement.models.requests.UpdateUserRequest;
+import com.techservices.usermanagement.models.responses.UpdateUserResponse;
+import com.techservices.usermanagement.models.UserDetails;
 import com.techservices.usermanagement.service.UserManagementService;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
@@ -12,17 +13,17 @@ import org.springframework.stereotype.Service;
 public class UserManagementServiceImpl implements UserManagementService {
 
     @Override
-    public UserDetailsResponse getUserById(@NonNull Long userId) {
+    public UserDetails getUserById(@NonNull Long userId) {
         return null;
     }
 
     @Override
-    public UserCreatedResponse createUser(@NonNull UserRequest request) {
+    public CreateUserResponse createUser(@NonNull CreateUserRequest request) {
         return null;
     }
 
     @Override
-    public UserUpdateResponse updateUser(@NonNull UserRequest request, @NonNull Long userId) {
+    public UpdateUserResponse updateUser(@NonNull UpdateUserRequest request, @NonNull Long userId) {
         return null;
     }
 
