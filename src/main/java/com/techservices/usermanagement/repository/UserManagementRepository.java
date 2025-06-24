@@ -15,7 +15,7 @@ public interface UserManagementRepository extends JpaRepository<UserDetailsEntit
      * @return the UserEntity if found, or null if not found
      */
     @NonNull
-    Optional<UserDetailsEntity> findById(@NonNull Long userId);
+    Optional<UserDetailsEntity> findUserById(@NonNull Long userId);
 
     /**
      * Creates a new user in the repository.

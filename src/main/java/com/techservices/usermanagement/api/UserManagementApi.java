@@ -1,9 +1,10 @@
 package com.techservices.usermanagement.api;
 
-import com.techservices.usermanagement.models.reguests.UserRequest;
-import com.techservices.usermanagement.models.responses.UserCreatedResponse;
-import com.techservices.usermanagement.models.responses.UserDetailsResponse;
-import com.techservices.usermanagement.models.responses.UserUpdateResponse;
+import com.techservices.usermanagement.models.requests.CreateUserRequest;
+import com.techservices.usermanagement.models.responses.CreateUserResponse;
+import com.techservices.usermanagement.models.requests.UpdateUserRequest;
+import com.techservices.usermanagement.models.responses.UpdateUserResponse;
+import com.techservices.usermanagement.models.UserDetails;
 import com.techservices.usermanagement.service.UserManagementService;
 import com.techservices.usermanagement.validator.UserManagementValidator;
 import jakarta.validation.Valid;
@@ -21,30 +22,31 @@ public class UserManagementApi {
     private UserManagementService userManagementService;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDetailsResponse> getUserById(@PathVariable Long userId) {
-        final UserDetailsResponse userDetailsResponse = userManagementService.getUserById(userId);
+    public ResponseEntity<UserDetails> getUserById(@PathVariable Long userId) {
+        final UserDetails userDetailsResponse = userManagementService.getUserById(userId);
         return ResponseEntity.ok(userDetailsResponse);
     }
 
     @PostMapping
-    public ResponseEntity<UserCreatedResponse> createUser(@Valid @RequestBody UserRequest createRequest) {
+    public ResponseEntity<CreateUserResponse> createUser(@Valid @RequestBody CreateUserRequest createRequest) {
         userManagementValidator.validateCreateRequest(createRequest);
-        final UserCreatedResponse userCreatedResponse = userManagementService.createUser(createRequest);
+        final CreateUserResponse userCreatedResponse = userManagementService.createUser(createRequest);
         return ResponseEntity.ok(userCreatedResponse);
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<UserUpdateResponse> updateUser(@Valid @RequestBody UserRequest updateRequest,
+    public ResponseEntity<UpdateUserResponse> updateUser(@Valid @RequestBody UpdateUserRequest updateRequest,
                                                          @PathVariable Long userId) {
         userManagementValidator.validateUserUpdateRequest(updateRequest, userId);
-        final UserUpdateResponse userUpdateResponse = userManagementService.updateUser(updateRequest, userId);
+        final UpdateUserResponse userUpdateResponse = userManagementService.updateUser(updateRequest, userId);
         return ResponseEntity.ok(userUpdateResponse);
     }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<Boolean> deleteUser(@PathVariable Long userId) {
         userManagementService.deleteUser(userId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent()
+                .build();
     }
 
 }
