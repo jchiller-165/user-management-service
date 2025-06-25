@@ -1,7 +1,7 @@
 package com.techservices.usermanagement.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -15,6 +15,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.techservices.usermanagement.errors.exceptions.FailureToUpdateException;
 import com.techservices.usermanagement.repository.entity.UserDetailsEntity;
 import com.techservices.usermanagement.repository.impl.UserManagementRepositoryImpl;
 
@@ -43,10 +44,8 @@ class UserManagementRepositoryImplTest {
     UserDetailsEntity entity = new UserDetailsEntity();
     entity.setId(42L);
 
-    doNothing().when(entityManager)
-        .persist(entity);
-    doNothing().when(entityManager)
-        .flush();
+    doNothing().when(entityManager).persist(entity);
+    doNothing().when(entityManager).flush();
 
     Long id = repository.createUser(entity);
 
@@ -56,45 +55,41 @@ class UserManagementRepositoryImplTest {
   }
 
   @Test
-  void updateUser_mergesAndReturnsTrue() {
+  void updateUser_mergesAndFlushes() {
     UserDetailsEntity entity = new UserDetailsEntity();
     when(entityManager.merge(entity)).thenReturn(entity);
 
-    boolean result = repository.updateUser(entity);
+    repository.updateUser(entity);
 
     verify(entityManager).merge(entity);
-    assertTrue(result);
+    verify(entityManager).flush();
   }
 
   @Test
-  void updateUser_mergeReturnsNull_returnsFalse() {
+  void updateUser_mergeReturnsNull_throwsException() {
     UserDetailsEntity entity = new UserDetailsEntity();
     when(entityManager.merge(entity)).thenReturn(null);
 
-    boolean result = repository.updateUser(entity);
-
-    assertFalse(result);
+    assertThrows(FailureToUpdateException.class, () -> repository.updateUser(entity));
   }
 
   @Test
-  void deleteUser_entityExists_removesAndReturnsTrue() {
+  void deleteUser_entityExists_removes() {
     UserDetailsEntity entity = new UserDetailsEntity();
     when(entityManager.find(UserDetailsEntity.class, 1L)).thenReturn(entity);
 
-    boolean result = repository.deleteUser(1L);
+    repository.deleteUser(1L);
 
     verify(entityManager).remove(entity);
-    assertTrue(result);
   }
 
   @Test
-  void deleteUser_entityNotFound_returnsFalse() {
+  void deleteUser_entityNotFound_doesNotRemove() {
     when(entityManager.find(UserDetailsEntity.class, 1L)).thenReturn(null);
 
-    boolean result = repository.deleteUser(1L);
+    repository.deleteUser(1L);
 
     verify(entityManager, never()).remove(any());
-    assertFalse(result);
   }
 
   @Test

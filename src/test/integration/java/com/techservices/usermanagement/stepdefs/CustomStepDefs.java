@@ -8,8 +8,6 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -21,6 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.ResourceUtils;
 
 import net.javacrumbs.jsonunit.core.Option;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;

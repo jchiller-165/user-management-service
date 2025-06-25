@@ -1,14 +1,17 @@
 package com.techservices.usermanagement.repository.impl;
 
-import com.techservices.usermanagement.repository.UserManagementRepository;
-import com.techservices.usermanagement.repository.entity.UserDetailsEntity;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import lombok.NonNull;
+import java.util.Optional;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import com.techservices.usermanagement.errors.exceptions.FailureToUpdateException;
+import com.techservices.usermanagement.repository.UserManagementRepository;
+import com.techservices.usermanagement.repository.entity.UserDetailsEntity;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import lombok.NonNull;
 
 @Repository
 @Transactional
@@ -31,18 +34,20 @@ public class UserManagementRepositoryImpl implements UserManagementRepository {
   }
 
   @Override
-  public boolean updateUser(@NonNull UserDetailsEntity userDetailsEntity) {
+  public void updateUser(@NonNull UserDetailsEntity userDetailsEntity) {
     UserDetailsEntity merged = entityManager.merge(userDetailsEntity);
-    return merged != null;
+    if (merged != null) {
+      entityManager.flush();
+      return;
+    }
+    throw new FailureToUpdateException("Unable to update user details");
   }
 
   @Override
-  public boolean deleteUser(@NonNull Long userId) {
+  public void deleteUser(@NonNull Long userId) {
     UserDetailsEntity entity = entityManager.find(UserDetailsEntity.class, userId);
     if (entity != null) {
       entityManager.remove(entity);
-      return true;
     }
-    return false;
   }
 }

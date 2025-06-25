@@ -21,10 +21,10 @@ Feature: Get the User Details for a given user ID
     And the response has error message matching "<ErrorMessage>"
 
     Examples:
-      | request                                               |         ErrorMessage                                |   ErrorCode |
-      | requests/userdetails_POST_request_scenario_2_1.json   | Conflict: company_name must be unique.              |     409     |
-      | requests/userdetails_POST_request_scenario_2_2.json   | Conflict: email must be unique.                     |     409     |
-      | requests/userdetails_POST_request_scenario_2_3.json   | Conflict: username must be unique.                  |     409     |
-      | requests/userdetails_POST_request_scenario_2_4.json   | username: Username is required                      |     400     |
-      | requests/userdetails_POST_request_scenario_2_5.json   | contactInfo.firstName: First Name is required       |     400     |
-      | requests/userdetails_POST_request_scenario_2_6.json   | companyDetails.address: Company address is required |     400     |
+      | request                                             | ErrorMessage                                        | ErrorCode |
+      | requests/userdetails_POST_request_scenario_2_1.json | Conflict: company_name must be unique.              | 409       |
+      | requests/userdetails_POST_request_scenario_2_2.json | Conflict: email must be unique.                     | 409       |
+      | requests/userdetails_POST_request_scenario_2_3.json | Conflict: username must be unique.                  | 409       |
+      | requests/userdetails_POST_request_scenario_2_4.json | username: Username is required                      | 400       |
+      | requests/userdetails_POST_request_scenario_2_5.json | contactInfo.firstName: First Name is required       | 400       |
+      | requests/userdetails_POST_request_scenario_2_6.json | companyDetails.address: Company address is required | 400       |
