@@ -1,4 +1,4 @@
-Feature: Get the User Details for a given user ID
+Feature: Create the User Details for a given User
 
   Background:
     Given an endpoint of "/api/v1/users"

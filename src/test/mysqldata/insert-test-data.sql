@@ -4,7 +4,9 @@ insert into `user_management`.`company_info`
 
 insert into `user_management`.`contact_info`
 (`id`, `first_name`, `last_name`, `contact_type`, `email`, `address`, `phone_number`, `city`, `state`, `postal_code`, `country`) VALUES
-(1, 'Alice', 'Johnson', 'User', 'alice@email.com', '456 Elm Street', '+1-650-987-6543', 'San Francisco', 'California', '94105', 'USA');
+(1, 'Alice', 'Johnson', 'User', 'alice@email.com', '456 Elm Street', '+1-650-987-6543', 'San Francisco', 'California', '94105', 'USA'),
+(2, 'delete', 'me', 'User', 'deleteme@email.com', '456 Elm Street', '+1-650-987-6543', 'San Francisco', 'California', '94105', 'USA');
 
 insert into `user_management`.`user_info` (`id`, `username`, `role`, `company_id`, `contact_id`) VALUES
-(1, 'alice_johnson', 'ADMIN', 1, 1);
+(1, 'alice_johnson', 'ADMIN', 1, 1),
+(999, 'delete_me', 'ADMIN', 1, 2);
