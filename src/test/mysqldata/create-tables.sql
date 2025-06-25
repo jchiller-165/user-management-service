@@ -51,6 +51,7 @@ create TABLE IF NOT EXISTS `user_management`.`user_info`
     `created_at`        datetime DEFAULT CURRENT_TIMESTAMP,
     `updated_at`        datetime DEFAULT CURRENT_TIMESTAMP ON update CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
+    UNIQUE KEY `username` (`username`),
     FOREIGN KEY (`company_id`) REFERENCES `company_info`(`id`) ON delete CASCADE,
     FOREIGN KEY (`contact_id`) REFERENCES `contact_info`(`id`) ON delete CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -1,12 +1,5 @@
 package com.techservices.usermanagement.service.impl;
 
-import static com.techservices.usermanagement.errors.exceptions.AppErrors.NOT_FOUND;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.techservices.usermanagement.errors.exceptions.NotFoundException;
 import com.techservices.usermanagement.models.UserDetails;
 import com.techservices.usermanagement.models.requests.CreateUserRequest;
@@ -16,8 +9,13 @@ import com.techservices.usermanagement.repository.UserManagementRepository;
 import com.techservices.usermanagement.repository.entity.UserDetailsEntity;
 import com.techservices.usermanagement.service.UserManagementService;
 import com.techservices.usermanagement.service.mappers.UserDetailsMapper;
-
 import lombok.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import static com.techservices.usermanagement.errors.exceptions.AppErrors.NOT_FOUND;
 
 @Service
 public class UserManagementServiceImpl implements UserManagementService {

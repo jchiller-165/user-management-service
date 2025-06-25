@@ -1,10 +1,10 @@
 package com.techservices.usermanagement.models;
 
-import java.util.Arrays;
-
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.Getter;
+
+import java.util.Arrays;
 
 @Data
 public class UserRole {

@@ -8,6 +8,8 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -86,6 +88,15 @@ public class CustomStepDefs {
   public void aRequestMatchingTheTemplateFile(String fileName) throws Exception {
     File file = ResourceUtils.getFile("classpath:" + fileName);
     this.requestBody = new String(Files.readAllBytes(file.toPath()));
+  }
+
+  @Then("the response has error message matching {string}")
+  public void theResponseHasErrorMessageMatching(String expectedMessage) throws Exception {
+    String actualJson = lastResponse.getBody();
+    ObjectMapper mapper = new ObjectMapper();
+    JsonNode node = mapper.readTree(actualJson);
+    String actualMessage = node.get("message").asText();
+    assertThat(actualMessage).isEqualTo(expectedMessage);
   }
 
 }

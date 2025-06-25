@@ -1,10 +1,9 @@
 package com.techservices.usermanagement.repository;
 
-import java.util.Optional;
-
 import com.techservices.usermanagement.repository.entity.UserDetailsEntity;
-
 import lombok.NonNull;
+
+import java.util.Optional;
 
 public interface UserManagementRepository {
 

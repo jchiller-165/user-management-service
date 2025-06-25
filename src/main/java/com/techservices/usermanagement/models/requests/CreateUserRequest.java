@@ -1,7 +1,7 @@
 package com.techservices.usermanagement.models.requests;
 
 import com.techservices.usermanagement.models.UserRole;
-
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -12,7 +12,9 @@ public class CreateUserRequest {
   @NotBlank(message = "Username is required")
   private String username;
   private UserRole.RoleTypeEnum userRole;
+  @Valid
   private ContactInfo contactInfo;
+  @Valid
   private CompanyDetails companyDetails;
 
   @Data

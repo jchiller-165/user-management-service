@@ -1,8 +1,5 @@
 package com.techservices.usermanagement.service.mappers;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-
 import com.techservices.usermanagement.models.CompanyDetails;
 import com.techservices.usermanagement.models.ContactInfo;
 import com.techservices.usermanagement.models.UserDetails;
@@ -11,10 +8,11 @@ import com.techservices.usermanagement.models.requests.CreateUserRequest;
 import com.techservices.usermanagement.repository.entity.CompanyDetailsEntity;
 import com.techservices.usermanagement.repository.entity.ContactInfoEntity;
 import com.techservices.usermanagement.repository.entity.UserDetailsEntity;
-
 import lombok.NonNull;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = { UserRole.class })
+@Mapper(componentModel = "spring", uses = {UserRole.class})
 public abstract class UserDetailsMapper {
 
   @Mapping(source = "id", target = "userId")
