@@ -1,16 +1,14 @@
 package com.techservices.usermanagement.repository.impl;
 
-import java.util.Optional;
-
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.techservices.usermanagement.repository.UserManagementRepository;
 import com.techservices.usermanagement.repository.entity.UserDetailsEntity;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.NonNull;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Repository
 @Transactional

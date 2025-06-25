@@ -1,9 +1,9 @@
-DROP DATABASE IF EXISTS `user_management`;
+drop database IF EXISTS `user_management`;
 
-CREATE DATABASE IF NOT EXISTS `user_management` DEFAULT CHARACTER SET utf8;
+create DATABASE IF NOT EXISTS `user_management` DEFAULT CHARACTER SET utf8;
 
-DROP TABLE IF EXISTS `user_management`.`company_info`;
-CREATE TABLE IF NOT EXISTS `user_management`.`company_info`
+drop table IF EXISTS `user_management`.`company_info`;
+create TABLE IF NOT EXISTS `user_management`.`company_info`
 (
     `id`                int(11) unsigned NOT NULL AUTO_INCREMENT,
     `company_name`      varchar(255) NOT NULL,
@@ -20,8 +20,8 @@ CREATE TABLE IF NOT EXISTS `user_management`.`company_info`
     UNIQUE KEY `company_name` (`company_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `user_management`.`contact_info`;
-CREATE TABLE IF NOT EXISTS `user_management`.`contact_info`
+drop table IF EXISTS `user_management`.`contact_info`;
+create TABLE IF NOT EXISTS `user_management`.`contact_info`
 (
     `id`                int(11) unsigned NOT NULL AUTO_INCREMENT,
     `first_name`        varchar(100) NOT NULL,
@@ -40,8 +40,8 @@ CREATE TABLE IF NOT EXISTS `user_management`.`contact_info`
     UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `user_management`.`user_info`;
-CREATE TABLE IF NOT EXISTS `user_management`.`user_info`
+drop table IF EXISTS `user_management`.`user_info`;
+create TABLE IF NOT EXISTS `user_management`.`user_info`
 (
     `id`                int(11) unsigned NOT NULL AUTO_INCREMENT,
     `username`          varchar(255) NOT NULL,
@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS `user_management`.`user_info`
     `created_at`        datetime DEFAULT CURRENT_TIMESTAMP,
     `updated_at`        datetime DEFAULT CURRENT_TIMESTAMP ON update CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`company_id`) REFERENCES `company_info`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`contact_id`) REFERENCES `contact_info`(`id`) ON DELETE CASCADE
+    UNIQUE KEY `username` (`username`),
+    FOREIGN KEY (`company_id`) REFERENCES `company_info`(`id`) ON delete CASCADE,
+    FOREIGN KEY (`contact_id`) REFERENCES `contact_info`(`id`) ON delete CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

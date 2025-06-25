@@ -8,11 +8,15 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ResourceUtils;
 
@@ -29,6 +33,7 @@ public class CustomStepDefs {
   protected TestRestTemplate restTemplate;
 
   protected String endPoint;
+  protected String requestBody;
   protected ResponseEntity<String> lastResponse;
   protected Map<String, String> pathParams = new HashMap<>();
 
@@ -49,7 +54,15 @@ public class CustomStepDefs {
       resolvedEndpoint = resolvedEndpoint.replace("{" + entry.getKey() + "}", entry.getValue());
     }
     HttpMethod httpMethod = HttpMethod.valueOf(method.toUpperCase());
-    lastResponse = restTemplate.exchange(resolvedEndpoint, httpMethod, HttpEntity.EMPTY, String.class);
+    HttpEntity<String> entity;
+    if ((httpMethod == HttpMethod.POST || httpMethod == HttpMethod.PUT) && requestBody != null) {
+      HttpHeaders headers = new HttpHeaders();
+      headers.setContentType(MediaType.APPLICATION_JSON);
+      entity = new HttpEntity<>(requestBody, headers);
+    } else {
+      entity = new HttpEntity<>(null);
+    }
+    lastResponse = restTemplate.exchange(resolvedEndpoint, httpMethod, entity, String.class);
   }
 
   @Then("the response has status code = {int}")
@@ -63,6 +76,27 @@ public class CustomStepDefs {
     String expectedJson = new String(Files.readAllBytes(file.toPath()));
     String actualJson = lastResponse.getBody();
     assertThatJson(actualJson).when(Option.IGNORING_EXTRA_FIELDS).isEqualTo(expectedJson);
+  }
+
+  @Then("the response has status code = {int} and has no body")
+  public void theResponseHasStatusCodeAndHasNoBody(int expectedStatus) {
+    assertThat(lastResponse.getStatusCode().value()).isEqualTo(expectedStatus);
+    assertThat(lastResponse.getBody() == null || lastResponse.getBody().isEmpty()).isTrue();
+  }
+
+  @Given("a request matching the template file, {string}")
+  public void aRequestMatchingTheTemplateFile(String fileName) throws Exception {
+    File file = ResourceUtils.getFile("classpath:" + fileName);
+    this.requestBody = new String(Files.readAllBytes(file.toPath()));
+  }
+
+  @Then("the response has error message matching {string}")
+  public void theResponseHasErrorMessageMatching(String expectedMessage) throws Exception {
+    String actualJson = lastResponse.getBody();
+    ObjectMapper mapper = new ObjectMapper();
+    JsonNode node = mapper.readTree(actualJson);
+    String actualMessage = node.get("message").asText();
+    assertThat(actualMessage).isEqualTo(expectedMessage);
   }
 
 }
