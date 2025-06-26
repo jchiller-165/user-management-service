@@ -7,7 +7,7 @@ on:
       - main
 
 env:
-  IMAGE_NAME: jchiller/user-management-service
+  IMAGE_NAME: jchiller165/user-management-service
 
 jobs:
   docker:
