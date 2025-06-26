@@ -3,7 +3,7 @@ package com.techservices.usermanagement.service;
 import com.techservices.usermanagement.models.UserDetails;
 import com.techservices.usermanagement.models.requests.CreateUserRequest;
 import com.techservices.usermanagement.models.requests.UpdateUserRequest;
-import com.techservices.usermanagement.models.responses.UpdateUserResponse;
+
 import lombok.NonNull;
 
 public interface UserManagementService {
@@ -28,10 +28,9 @@ public interface UserManagementService {
    * Updates user details for a user ID.
    *
    * @param userId the ID of the user
-   * @return UserUpdateResponse containing user details or null if not found
    * @UpdateUserRequest request containing updated user details
    */
-  UpdateUserResponse updateUser(@NonNull UpdateUserRequest request, @NonNull Long userId);
+  void updateUser(@NonNull UpdateUserRequest request, @NonNull Long userId);
 
   /**
    * Deletes a user by user ID.

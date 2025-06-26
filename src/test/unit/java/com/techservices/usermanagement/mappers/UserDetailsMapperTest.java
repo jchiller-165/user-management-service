@@ -13,12 +13,13 @@ import com.techservices.usermanagement.models.ContactInfo;
 import com.techservices.usermanagement.models.UserDetails;
 import com.techservices.usermanagement.models.UserRole;
 import com.techservices.usermanagement.models.requests.CreateUserRequest;
+import com.techservices.usermanagement.models.requests.UpdateUserRequest;
 import com.techservices.usermanagement.repository.entity.CompanyDetailsEntity;
 import com.techservices.usermanagement.repository.entity.ContactInfoEntity;
 import com.techservices.usermanagement.repository.entity.UserDetailsEntity;
 import com.techservices.usermanagement.service.mappers.UserDetailsMapper;
 
-public class UserDetailsMapperTest {
+class UserDetailsMapperTest {
 
   private final UserDetailsMapper mapper = Mappers.getMapper(UserDetailsMapper.class);
 
@@ -45,6 +46,44 @@ public class UserDetailsMapperTest {
     assertEquals(UserRole.RoleTypeEnum.findRoleType(request.getUserRole().getValue()), entity.getUserRole());
     assertTrue(compareCompanyDetailsEntity(request.getCompanyDetails(), entity.getCompanyDetails()));
     assertTrue(compareContactInfoEntity(request.getContactInfo(), entity.getContactInfo()));
+  }
+
+  @Test
+  void updateUserDetailsEntity_updatesFieldsCorrectly() {
+    UserDetailsEntity entity = TestModelsCreator.createUserDetailsEntity();
+    UpdateUserRequest request = TestModelsCreator.createUpdateUserRequest();
+
+    // Change initial values to ensure update is effective
+    entity.setUsername("oldUsername");
+    entity.setUserRole(null);
+    entity.setContactInfo(null);
+    entity.setCompanyDetails(null);
+
+    mapper.updateUserDetailsEntity(entity, request);
+
+    assertEquals(request.getUsername(), entity.getUsername());
+    assertEquals(UserRole.RoleTypeEnum.findRoleType(request.getUserRole().getValue()), entity.getUserRole());
+
+    // ContactInfo assertions
+    assertNotNull(entity.getContactInfo());
+    assertEquals(request.getContactInfo().getEmail(), entity.getContactInfo().getEmail());
+    assertEquals(request.getContactInfo().getPhoneNumber(), entity.getContactInfo().getPhoneNumber());
+    assertEquals(request.getContactInfo().getFirstName(), entity.getContactInfo().getFirstName());
+    assertEquals(request.getContactInfo().getLastName(), entity.getContactInfo().getLastName());
+    assertEquals(request.getContactInfo().getAddress(), entity.getContactInfo().getAddress());
+    assertEquals(request.getContactInfo().getCity(), entity.getContactInfo().getCity());
+    assertEquals(request.getContactInfo().getState(), entity.getContactInfo().getState());
+    assertEquals(request.getContactInfo().getPostalCode(), entity.getContactInfo().getPostalCode());
+    assertEquals(request.getContactInfo().getCountry(), entity.getContactInfo().getCountry());
+
+    // CompanyDetails assertions
+    assertNotNull(entity.getCompanyDetails());
+    assertEquals(request.getCompanyDetails().getCompanyName(), entity.getCompanyDetails().getCompanyName());
+    assertEquals(request.getCompanyDetails().getAddress(), entity.getCompanyDetails().getAddress());
+    assertEquals(request.getCompanyDetails().getCity(), entity.getCompanyDetails().getCity());
+    assertEquals(request.getCompanyDetails().getState(), entity.getCompanyDetails().getState());
+    assertEquals(request.getCompanyDetails().getPostalCode(), entity.getCompanyDetails().getPostalCode());
+    assertEquals(request.getCompanyDetails().getCountry(), entity.getCompanyDetails().getCountry());
   }
 
   private boolean compareCompanyDetails(CompanyDetailsEntity expected, CompanyDetails companyDetails) {

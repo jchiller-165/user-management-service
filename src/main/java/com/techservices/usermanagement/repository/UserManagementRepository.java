@@ -1,9 +1,10 @@
 package com.techservices.usermanagement.repository;
 
-import com.techservices.usermanagement.repository.entity.UserDetailsEntity;
-import lombok.NonNull;
-
 import java.util.Optional;
+
+import com.techservices.usermanagement.repository.entity.UserDetailsEntity;
+
+import lombok.NonNull;
 
 public interface UserManagementRepository {
 
@@ -27,13 +28,13 @@ public interface UserManagementRepository {
    *
    * @param userDetailsEntity the UserEntity to update
    */
-  boolean updateUser(@NonNull UserDetailsEntity userDetailsEntity);
+  void updateUser(@NonNull UserDetailsEntity userDetailsEntity);
 
   /**
    * Deletes a user by their ID.
    *
    * @param userId the ID of the user to delete
    */
-  boolean deleteUser(@NonNull Long userId);
+  void deleteUser(@NonNull Long userId);
 
 }

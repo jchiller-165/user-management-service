@@ -28,7 +28,6 @@ import com.techservices.usermanagement.errors.exceptions.BadRequestException;
 import com.techservices.usermanagement.errors.exceptions.NotFoundException;
 import com.techservices.usermanagement.models.requests.CreateUserRequest;
 import com.techservices.usermanagement.models.requests.UpdateUserRequest;
-import com.techservices.usermanagement.models.responses.UpdateUserResponse;
 import com.techservices.usermanagement.service.UserManagementService;
 import com.techservices.usermanagement.validator.UserManagementValidator;
 
@@ -110,11 +109,12 @@ class UserManagementApiTest {
   void updateUser_success() throws Exception {
     UpdateUserRequest request = TestModelsCreator.createUpdateUserRequest();
     doNothing().when(userManagementValidator).validateUserUpdateRequest(any(), anyLong());
-    Mockito.when(userManagementService.updateUser(any(), anyLong()))
-        .thenReturn(new UpdateUserResponse("userId", "Updated User"));
+    doNothing().when(userManagementService).updateUser(any(), anyLong());
 
-    mockMvc.perform(put("/api/v1/users/1").contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(request))).andExpect(status().isOk());
+    mockMvc.perform(put("/api/v1/users/1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isNoContent());
   }
 
   @Test
@@ -148,7 +148,8 @@ class UserManagementApiTest {
   void deleteUser_success() throws Exception {
     doNothing().when(userManagementService).deleteUser(anyLong());
 
-    mockMvc.perform(delete("/api/v1/users/1")).andExpect(status().isNoContent());
+    mockMvc.perform(delete("/api/v1/users/1"))
+        .andExpect(status().isNoContent());
   }
 
 }
