@@ -1,0 +1,25 @@
+{
+  "username": "updatedUsername",
+  "userRole": "ADMIN",
+  "contactInfo": {
+    "email": "updatedEmailn@email.com",
+    "firstName": "Jason",
+    "lastName": "Miller",
+    "phoneNumber": "+1-650-987-6543",
+    "address": "456 Elm Street",
+    "city": "San Francisco",
+    "state": "California",
+    "postalCode": "94105",
+    "country": "USA"
+  },
+  "companyDetails": {
+    "companyName": "Updated Tech Solutions",
+    "address": "123 Tech Lane",
+    "city": "Silicon Valley",
+    "state": "California",
+    "postalCode": "94043",
+    "country": "USA",
+    "phoneNumber": "+1-650-123-4567",
+    "website": "www.jasontechsolutions.com"
+  }
+}

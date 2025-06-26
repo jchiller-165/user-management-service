@@ -19,6 +19,7 @@ import com.techservices.usermanagement.TestModelsCreator;
 import com.techservices.usermanagement.errors.exceptions.NotFoundException;
 import com.techservices.usermanagement.models.UserDetails;
 import com.techservices.usermanagement.models.requests.CreateUserRequest;
+import com.techservices.usermanagement.models.requests.UpdateUserRequest;
 import com.techservices.usermanagement.repository.UserManagementRepository;
 import com.techservices.usermanagement.repository.entity.UserDetailsEntity;
 import com.techservices.usermanagement.service.impl.UserManagementServiceImpl;
@@ -83,4 +84,55 @@ class UserManagementServiceImplTest {
     verify(userDetailsMapper).toUserDetailsEntity(request);
     verify(userRepository).createUser(entity);
   }
+
+  @Test
+  void updateUser_updatesUser_whenUserExists() {
+    Long userId = 1L;
+    UpdateUserRequest request = TestModelsCreator.createUpdateUserRequest();
+    UserDetailsEntity entity = new UserDetailsEntity();
+
+    when(userRepository.findUserById(userId)).thenReturn(Optional.of(entity));
+
+    userManagementService.updateUser(request, userId);
+
+    verify(userRepository).findUserById(userId);
+    verify(userDetailsMapper).updateUserDetailsEntity(entity, request);
+    verify(userRepository).updateUser(entity);
+  }
+
+  @Test
+  void updateUser_throwsNotFoundException_whenUserDoesNotExist() {
+    Long userId = 99L;
+    UpdateUserRequest request = TestModelsCreator.createUpdateUserRequest();
+
+    when(userRepository.findUserById(userId)).thenReturn(Optional.empty());
+
+    assertThrows(NotFoundException.class, () -> userManagementService.updateUser(request, userId));
+    verify(userRepository).findUserById(userId);
+    verifyNoInteractions(userDetailsMapper);
+  }
+
+  @Test
+  void deleteUser_deletesUser_whenUserExists() {
+    Long userId = 1L;
+    UserDetailsEntity entity = new UserDetailsEntity();
+
+    when(userRepository.findUserById(userId)).thenReturn(Optional.of(entity));
+
+    userManagementService.deleteUser(userId);
+
+    verify(userRepository).findUserById(userId);
+    verify(userRepository).deleteUser(userId);
+  }
+
+  @Test
+  void deleteUser_throwsNotFoundException_whenUserDoesNotExist() {
+    Long userId = 99L;
+    when(userRepository.findUserById(userId)).thenReturn(Optional.empty());
+
+    assertThrows(NotFoundException.class, () -> userManagementService.deleteUser(userId));
+    verify(userRepository).findUserById(userId);
+    verifyNoInteractions(userDetailsMapper);
+  }
+
 }

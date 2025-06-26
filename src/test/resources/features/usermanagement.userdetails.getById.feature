@@ -21,8 +21,8 @@ Feature: Get the User Details for a given user ID
     Then the response has status code = 404
 
     Examples:
-      | userId    |
-      | 999       |
+      | userId |
+      | 999    |
 
   Scenario Outline: [3] A "GET"  request is sent to the endpoint to retrieve user details with a blank user ID
 
