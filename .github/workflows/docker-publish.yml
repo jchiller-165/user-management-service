@@ -5,6 +5,7 @@ on:
     branches:
       - stage
       - main
+  workflow_dispatch:
 
 env:
   IMAGE_NAME: jchiller/user-management-service
