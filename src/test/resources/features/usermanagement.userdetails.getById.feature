@@ -22,7 +22,7 @@ Feature: Get the User Details for a given user ID
 
     Examples:
       | userId |
-      | 999    |
+      | 991    |
 
   Scenario Outline: [3] A "GET"  request is sent to the endpoint to retrieve user details with a blank user ID
 
