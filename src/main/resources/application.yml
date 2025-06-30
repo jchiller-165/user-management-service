@@ -15,3 +15,11 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: true
+
+logging:
+  level:
+    org.springframework.web: INFO
+    org.springframework.web.client.RestTemplate: INFO
+    org.springframework.test.web.client: INFO
+    org.apache.http: INFO
+    org.apache.http.wire: INFO

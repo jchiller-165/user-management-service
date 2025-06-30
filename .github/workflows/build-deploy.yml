@@ -1,0 +1,115 @@
+name: Build, Version, and Deploy
+
+on:
+  push:
+    branches:
+      - stage
+      - main
+
+env:
+  IMAGE_NAME: jchiller165/user-management-service
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Required to push tags
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build with Maven
+        run: mvn clean -P IntegrationTestSetup verify
+
+      - name: Extract version from pom.xml
+        id: version
+        run: |
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }}
+
+      - name: Set up Fly.io CLI
+        run: |
+          curl -L https://fly.io/install.sh | sh
+          echo "$HOME/.fly/bin" >> $GITHUB_PATH
+
+      - name: Log in to Fly.io
+        run: flyctl auth login --access-token ${{ secrets.FLY_API_TOKEN }}
+
+      - name: Update version and commit bump (stage)
+        if: github.ref == 'refs/heads/stage'
+        run: |
+          CURRENT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "Current version: $CURRENT_VERSION"
+          BASE_VERSION=${CURRENT_VERSION/-SNAPSHOT/}
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$BASE_VERSION"
+
+          if [ "$PATCH" -lt 9 ]; then
+            PATCH=$((PATCH + 1))
+          else
+            MINOR=$((MINOR + 1))
+            PATCH=0
+          fi
+
+          NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}-SNAPSHOT"
+          echo "New version: $NEW_VERSION"
+
+          mvn versions:set -DnewVersion=$NEW_VERSION
+          mvn versions:commit
+
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git commit -am "Bump version to $NEW_VERSION [skip ci]"
+          git push origin stage
+
+      - name: Finalize version and tag release (main)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          SNAPSHOT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          RELEASE_VERSION=${SNAPSHOT_VERSION/-SNAPSHOT/}
+          echo "Releasing version: $RELEASE_VERSION"
+
+          mvn versions:set -DnewVersion=$RELEASE_VERSION
+          mvn versions:commit
+
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git commit -am "Release version $RELEASE_VERSION [skip ci]"
+          git tag -a "v$RELEASE_VERSION" -m "Release $RELEASE_VERSION"
+          git push origin main
+          git push origin "v$RELEASE_VERSION"
+
+      - name: Deploy to Fly.io
+        run: |
+          VERSION=${{ steps.version.outputs.version }}
+          if [[ "${GITHUB_REF##*/}" == "stage" ]]; then
+            flyctl deploy --image ${{ env.IMAGE_NAME }}:$VERSION --app user-management-service-stg
+          elif [[ "${GITHUB_REF##*/}" == "main" ]]; then
+            VERSION_NO_SNAPSHOT=${VERSION/-SNAPSHOT/}
+            flyctl deploy --image ${{ env.IMAGE_NAME }}:$VERSION_NO_SNAPSHOT --app user-management-service-prd
+          else
+            echo "Unknown branch, skipping deploy"
+            exit 1
+          fi
