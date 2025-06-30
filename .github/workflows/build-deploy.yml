@@ -104,12 +104,16 @@ jobs:
       - name: Deploy to Fly.io
         run: |
           VERSION=${{ steps.version.outputs.version }}
+
           if [[ "${GITHUB_REF##*/}" == "stage" ]]; then
-            flyctl deploy --image ${{ env.IMAGE_NAME }}:$VERSION --app user-management-service-stg
+            APP_NAME="user-management-service-stg"
           elif [[ "${GITHUB_REF##*/}" == "main" ]]; then
-            VERSION_NO_SNAPSHOT=${VERSION/-SNAPSHOT/}
-            flyctl deploy --image ${{ env.IMAGE_NAME }}:$VERSION_NO_SNAPSHOT --app user-management-service-prd
+            APP_NAME="user-management-service-prd"
           else
-            echo "Unknown branch, skipping deploy"
+            echo "Unknown branch: ${GITHUB_REF##*/}, skipping deploy"
             exit 1
           fi
+
+          echo "Deploying to $APP_NAME with tag: $VERSION"
+          flyctl deploy --image ${{ env.IMAGE_NAME }}:$VERSION --app "$APP_NAME"
+      

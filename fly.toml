@@ -1,0 +1,29 @@
+app = "user-management-service-stg"  # Change to `user-management-service-prd` for production
+primary_region = "ord"               # Change to your preferred region
+
+[build]
+image = "jchiller165/user-management-service:latest"  # This will be overridden by your workflow
+
+[env]
+JAVA_OPTS = "-XX:+UseContainerSupport -Dserver.port=8080"
+
+[[services]]
+protocol = "tcp"
+internal_port = 8080
+auto_start_machines = true
+auto_stop_machines = true
+min_machines_running = 0
+processes = ["app"]
+
+[[services.ports]]
+port = 80
+handlers = ["http"]
+
+[[services.ports]]
+port = 443
+handlers = ["tls", "http"]
+
+[[vm]]
+cpu_kind = "shared"
+cpus = 1
+memory = "512mb"
