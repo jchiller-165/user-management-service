@@ -27,3 +27,8 @@ handlers = ["tls", "http"]
 cpu_kind = "shared"
 cpus = 1
 memory = "512mb"
+
+[registry]
+server = "docker.io"
+username = "${DOCKER_USERNAME}"  # Reference Fly.io secret for Docker username
+password = "${DOCKER_PASSWORD}"
