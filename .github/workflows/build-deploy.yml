@@ -10,7 +10,7 @@ env:
   IMAGE_NAME: jchiller165/user-management-service
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -55,9 +55,6 @@ jobs:
           curl -L https://fly.io/install.sh | sh
           echo "$HOME/.fly/bin" >> $GITHUB_PATH
 
-      - name: Log in to Fly.io
-        run: flyctl auth login --access-token ${{ secrets.FLY_API_TOKEN }}
-
       - name: Update version and commit bump (stage)
         if: github.ref == 'refs/heads/stage'
         run: |
@@ -100,20 +97,3 @@ jobs:
           git tag -a "v$RELEASE_VERSION" -m "Release $RELEASE_VERSION"
           git push origin main
           git push origin "v$RELEASE_VERSION"
-
-      - name: Deploy to Fly.io
-        run: |
-          VERSION=${{ steps.version.outputs.version }}
-
-          if [[ "${GITHUB_REF##*/}" == "stage" ]]; then
-            APP_NAME="user-management-service-stg"
-          elif [[ "${GITHUB_REF##*/}" == "main" ]]; then
-            APP_NAME="user-management-service-prd"
-          else
-            echo "Unknown branch: ${GITHUB_REF##*/}, skipping deploy"
-            exit 1
-          fi
-
-          echo "Deploying to $APP_NAME with tag: $VERSION"
-          flyctl deploy --image ${{ env.IMAGE_NAME }}:$VERSION --app "$APP_NAME"
-      
