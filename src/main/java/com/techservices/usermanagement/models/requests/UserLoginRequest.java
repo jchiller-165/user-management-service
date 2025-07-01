@@ -1,0 +1,14 @@
+package com.techservices.usermanagement.models.requests;
+
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+
+@Data
+public class UserLoginRequest {
+
+  @NotBlank(message = "Username cannot be blank")
+  private String username;
+  @NotBlank(message = "Password cannot be blank")
+  private String password;
+
+}
