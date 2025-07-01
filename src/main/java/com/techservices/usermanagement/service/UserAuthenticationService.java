@@ -1,6 +1,7 @@
 package com.techservices.usermanagement.service;
 
 import com.techservices.usermanagement.models.requests.RefreshTokenRequest;
+import com.techservices.usermanagement.models.requests.RegisterUserRequest;
 import com.techservices.usermanagement.models.requests.UserLoginRequest;
 import com.techservices.usermanagement.models.responses.RefreshTokenResponse;
 import com.techservices.usermanagement.models.responses.UserLoginResponse;
@@ -22,5 +23,13 @@ public interface UserAuthenticationService {
    * @return a RefreshTokenResponse containing new access and refresh tokens if the refresh is successful
    */
   RefreshTokenResponse refreshToken(RefreshTokenRequest refreshRequest);
+
+  /**
+   * Registers a new user based on the provided registration request.
+   *
+   * @param registerUserRequest the request containing user registration details
+   * @return the ID of the newly registered user
+   */
+  Long registerUser(RegisterUserRequest registerUserRequest);
 
 }

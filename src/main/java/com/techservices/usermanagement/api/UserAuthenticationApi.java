@@ -1,13 +1,17 @@
 package com.techservices.usermanagement.api;
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.techservices.usermanagement.models.requests.RefreshTokenRequest;
+import com.techservices.usermanagement.models.requests.RegisterUserRequest;
 import com.techservices.usermanagement.models.requests.UserLoginRequest;
 import com.techservices.usermanagement.models.responses.RefreshTokenResponse;
 import com.techservices.usermanagement.models.responses.UserLoginResponse;
@@ -37,6 +41,18 @@ public class UserAuthenticationApi {
   public ResponseEntity<RefreshTokenResponse> refreshToken(@Valid @RequestBody RefreshTokenRequest refreshRequest) {
     final RefreshTokenResponse refreshResponse = userAuthenticationService.refreshToken(refreshRequest);
     return ResponseEntity.ok(refreshResponse);
+  }
+
+  @Operation(summary = "Register User")
+  @PostMapping("/register")
+  public ResponseEntity<Void> registerUser(@Valid @RequestBody RegisterUserRequest registerUserRequest) {
+    final Long registerUser = userAuthenticationService.registerUser(registerUserRequest);
+    final URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{id}")
+        .buildAndExpand(registerUser)
+        .toUri();
+
+    return ResponseEntity.created(location).build();
   }
 
 }

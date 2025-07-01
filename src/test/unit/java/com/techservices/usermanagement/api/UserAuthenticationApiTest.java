@@ -3,6 +3,7 @@ package com.techservices.usermanagement.api;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techservices.usermanagement.TestModelsCreator;
 import com.techservices.usermanagement.models.requests.RefreshTokenRequest;
+import com.techservices.usermanagement.models.requests.RegisterUserRequest;
 import com.techservices.usermanagement.models.requests.UserLoginRequest;
 import com.techservices.usermanagement.models.responses.RefreshTokenResponse;
 import com.techservices.usermanagement.models.responses.UserLoginResponse;
@@ -68,6 +70,18 @@ class UserAuthenticationApiTest {
     mockMvc.perform(post("/auth/refresh").contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(refreshTokenRequest))).andExpect(status().isOk())
         .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
+  }
+
+  @Test
+  void registerUser_returnsCreatedWithLocation() throws Exception {
+    RegisterUserRequest registerRequest = TestModelsCreator.createRegisterUserRequest();
+    Long userId = 42L;
+
+    when(userAuthenticationService.registerUser(registerRequest)).thenReturn(userId);
+
+    mockMvc.perform(post("/auth/register").contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(registerRequest))).andExpect(status().isCreated())
+        .andExpect(header().string("Location", org.hamcrest.Matchers.containsString("/auth/register/" + userId)));
   }
 
 }

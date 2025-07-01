@@ -23,3 +23,8 @@ logging:
     org.springframework.test.web.client: DEBUG
     org.apache.http: DEBUG
     org.apache.http.wire: DEBUG
+
+security:
+  secret: ${JWT_SECRET:testSecretKey1234567890testSecretKey1234567890}
+  access-expiration: ${JWT_ACCESS_EXPIRATION:3600}
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION:3600}

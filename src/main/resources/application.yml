@@ -24,3 +24,8 @@ logging:
     org.springframework.test.web.client: INFO
     org.apache.http: INFO
     org.apache.http.wire: INFO
+
+security:
+  secret: ${JWT_SECRET}
+  access-expiration: ${JWT_ACCESS_EXPIRATION:3600}
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION:3600}
