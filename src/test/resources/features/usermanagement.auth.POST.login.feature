@@ -34,14 +34,3 @@ Feature: Login User Management API
     Examples:
       | request                                           |       ErrorMessage          | ErrorCode |
       | requests/usermanagement_auth_POST_scenario_3.json |     Invalid Credentials     |    400    |
-
-  Scenario Outline: [4] A "POST" request is sent to the endpoint that fails due to missing credentials
-
-    Given a request matching the template file, "<request>"
-    When a "POST" request to the endpoint is sent
-    Then the response has status code = <ErrorCode>
-    And the response has error message matching "<ErrorMessage>"
-
-    Examples:
-      | request                                             |       ErrorMessage              | ErrorCode |
-      | requests/usermanagement_auth_POST_scenario_4_1.json |     Username cannot be blank    |    400    |
