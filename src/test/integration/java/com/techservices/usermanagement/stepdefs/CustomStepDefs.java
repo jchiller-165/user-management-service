@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
@@ -22,13 +23,20 @@ import net.javacrumbs.jsonunit.core.Option;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techservices.usermanagement.models.UserRole;
 
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 
 @SpringBootTest
 public class CustomStepDefs {
+
+  @Value("${security.secret}")
+  private String jwtSecret;
 
   @Autowired
   protected TestRestTemplate restTemplate;
@@ -98,6 +106,22 @@ public class CustomStepDefs {
     JsonNode node = mapper.readTree(actualJson);
     String actualMessage = node.get("message").asText();
     assertThat(actualMessage).isEqualTo(expectedMessage);
+  }
+
+  @And("the response contains a valid JWT for user {string} with role {string} and userId {string}")
+  public void response_contains_valid_jwt(String expectedUsername, String expectedRole, String expectedUserId)
+      throws Exception {
+    ObjectMapper mapper = new ObjectMapper();
+    JsonNode node = mapper.readTree(lastResponse.getBody());
+    String token = node.get("accessToken").asText();
+    String secret = jwtSecret;
+
+    Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+
+    assertThat(claims.getSubject()).isEqualTo(expectedUsername);
+    assertThat(claims.get("role")).isEqualTo(expectedRole);
+    assertThat(claims.get("userId")).isEqualTo(Integer.valueOf(expectedUserId));
+    assertThat(claims.getExpiration()).isNotNull();
   }
 
 }

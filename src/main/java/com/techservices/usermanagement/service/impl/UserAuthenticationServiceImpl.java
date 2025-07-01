@@ -5,6 +5,8 @@ import static com.techservices.usermanagement.errors.AppErrors.INVALID_REFRESH_T
 import static com.techservices.usermanagement.errors.AppErrors.USER_ALREADY_EXISTS;
 import static com.techservices.usermanagement.errors.AppErrors.USER_NOT_FOUND;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,8 @@ import com.techservices.usermanagement.service.util.JwtService;
 
 @Service
 public class UserAuthenticationServiceImpl implements UserAuthenticationService {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(UserAuthenticationServiceImpl.class);
 
   @Autowired
   private UserAuthenticationRepository userAuthenticationRepository;

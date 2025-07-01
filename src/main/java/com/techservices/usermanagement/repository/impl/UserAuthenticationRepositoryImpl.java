@@ -16,8 +16,7 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class UserAuthenticationRepositoryImpl implements UserAuthenticationRepository {
 
-  private static final String USERNAME_QUERY = " SELECT u.userId, u.username, u.password "
-      + " FROM users u WHERE u.username = :username ";
+  private static final String USERNAME_QUERY = "SELECT u FROM AppUserEntity u WHERE u.username = :username";
 
   @PersistenceContext
   private EntityManager entityManager;

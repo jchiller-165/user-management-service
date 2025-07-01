@@ -10,7 +10,7 @@ import com.techservices.usermanagement.service.mappers.UserAuthenticationMapper;
 public class UserManagementConfig {
 
   @Bean
-  public UserAuthenticationMapper getUserAuthenticationMapper() {
+  public UserAuthenticationMapper userAuthenticationMapper() {
     return Mappers.getMapper(UserAuthenticationMapper.class);
   }
 

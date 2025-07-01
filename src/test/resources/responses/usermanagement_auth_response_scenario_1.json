@@ -1,0 +1,5 @@
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYWRtaW4iLCJ0b2tlbl90eXBlIjoiYWNjZXNzIiwidXNlcklkIjoxLCJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc1MTQwMDc1MywiZXhwIjoxNzUxNDAwNzU2fQ.qvUffzXCNkBlkNq9STn-Olj5BFUe19o8SexUJ0x3h8A",
+  "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYWRtaW4iLCJ0b2tlbl90eXBlIjoicmVmcmVzaCIsInVzZXJJZCI6MSwic3ViIjoidGVzdHVzZXIiLCJpYXQiOjE3NTE0MDA3NTMsImV4cCI6MTc1MTQwMDc1Nn0.D150aFnKqDq0QbHAtckMGR5mF-kaCAruMsFFUmTubHY",
+  "userId": 1
+}
