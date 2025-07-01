@@ -18,7 +18,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techservices.usermanagement.TestModelsCreator;
+import com.techservices.usermanagement.models.requests.RefreshTokenRequest;
 import com.techservices.usermanagement.models.requests.UserLoginRequest;
+import com.techservices.usermanagement.models.responses.RefreshTokenResponse;
 import com.techservices.usermanagement.models.responses.UserLoginResponse;
 import com.techservices.usermanagement.service.UserAuthenticationService;
 
@@ -53,6 +55,18 @@ class UserAuthenticationApiTest {
 
     mockMvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(loginRequest))).andExpect(status().isOk())
+        .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
+  }
+
+  @Test
+  void refreshToken_returnsOk() throws Exception {
+    RefreshTokenRequest refreshTokenRequest = TestModelsCreator.createRefreshTokenRequest();
+    RefreshTokenResponse expectedResponse = TestModelsCreator.createRefreshTokenResponse();
+
+    when(userAuthenticationService.refreshToken(refreshTokenRequest)).thenReturn(expectedResponse);
+
+    mockMvc.perform(post("/auth/refresh").contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(refreshTokenRequest))).andExpect(status().isOk())
         .andExpect(content().json(objectMapper.writeValueAsString(expectedResponse)));
   }
 

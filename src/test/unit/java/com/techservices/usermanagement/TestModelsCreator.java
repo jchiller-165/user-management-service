@@ -1,6 +1,8 @@
 package com.techservices.usermanagement;
 
+import com.techservices.usermanagement.models.requests.RefreshTokenRequest;
 import com.techservices.usermanagement.models.requests.UserLoginRequest;
+import com.techservices.usermanagement.models.responses.RefreshTokenResponse;
 import com.techservices.usermanagement.models.responses.UserLoginResponse;
 
 public class TestModelsCreator {
@@ -22,6 +24,18 @@ public class TestModelsCreator {
     userLoginResponse.setAccessToken(ACCESS_TOKEN);
     userLoginResponse.setRefreshToken(REFRESH_TOKEN);
     return userLoginResponse;
+  }
+
+  public static RefreshTokenRequest createRefreshTokenRequest() {
+    RefreshTokenRequest refreshTokenRequest = new RefreshTokenRequest();
+    refreshTokenRequest.setRefreshToken(REFRESH_TOKEN);
+    return refreshTokenRequest;
+  }
+
+  public static RefreshTokenResponse createRefreshTokenResponse() {
+    RefreshTokenResponse refreshTokenResponse = new RefreshTokenResponse();
+    refreshTokenResponse.setAccessToken(ACCESS_TOKEN);
+    return refreshTokenResponse;
   }
 
 }
